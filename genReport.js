@@ -8,7 +8,12 @@ function getDateParts(dateValue) {
   return { year, month, day };
 }
 
-function getFolio(dateValue) {
+function formatDate(dateValue) {
+  const { year, month, day } = getDateParts(dateValue);
+  return `${day}/${month}/${year}`;
+}
+
+function createFolio(dateValue) {
   const { year, month, day } = getDateParts(dateValue);
   const dateCode = `${day}${month}${year.slice(-2)}`;
   const storageKey = `reportes-tt-${dateCode}`;
@@ -17,11 +22,6 @@ function getFolio(dateValue) {
   localStorage.setItem(storageKey, String(nextNumber));
 
   return `R-TT-${dateCode}-${String(nextNumber).padStart(2, "0")}`;
-}
-
-function formatDate(dateValue) {
-  const { year, month, day } = getDateParts(dateValue);
-  return `${day}/${month}/${year}`;
 }
 
 function setCurrentDateAndTime() {
@@ -34,44 +34,43 @@ function setCurrentDateAndTime() {
     `${pad2(now.getHours())}:${pad2(now.getMinutes())}`;
 }
 
-function createPdf(values, folio) {
+function generarPDF(report) {
   const { jsPDF } = window.jspdf;
-  const pdf = new jsPDF({ unit: "mm", format: "a4" });
-  const pageWidth = pdf.internal.pageSize.getWidth();
+  const doc = new jsPDF("p", "mm", "a4");
+  const pageWidth = doc.internal.pageSize.getWidth();
 
-  pdf.setFillColor(24, 61, 66);
-  pdf.rect(0, 0, pageWidth, 45, "F");
+  // Encabezado
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(18);
+  doc.setTextColor(24, 61, 66);
+  doc.text("Reporte de inspección:", 18, 24);
+  doc.text("Tratamientos Termicos", 18, 34);
 
-  pdf.setTextColor(255, 255, 255);
-  pdf.setFont("helvetica", "bold");
-  pdf.setFontSize(18);
-  pdf.text("Reporte de inspección:", 18, 23);
-  pdf.text("Tratamientos Termicos", 18, 33);
+  // Folio
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(10);
+  doc.setTextColor(18, 105, 95);
+  doc.text(`Folio: ${report.folio}`, 18, 45);
 
-  pdf.setFontSize(8);
-  pdf.text("CONTROL DE CALIDAD / REGISTRO DE INSPECCIÓN", 18, 40);
-
-  pdf.setTextColor(18, 105, 95);
-  pdf.setFontSize(10);
-  pdf.text(`Folio: ${folio}`, 18, 57);
-
-  pdf.autoTable({
-    startY: 66,
+  // Tabla con los datos
+  doc.autoTable({
+    startY: 55,
     head: [["Dato de inspección", "Registro"]],
     body: [
-      ["Fecha", formatDate(values.fecha)],
-      ["Hora", values.hora],
-      ["Empleado", values.empleado.trim()],
-      ["Temp. de Austenizado Z1", `${values.z1} °C`],
-      ["Temp. de Austenizado Z2", `${values.z2} °C`],
-      ["Avance", `${values.avance} mm`],
-      ["Ciclo", `${values.ciclo} seg`],
-      ["Tiempo de Austenizado", `${values.tiempo} min`],
+      ["Fecha", formatDate(report.fecha)],
+      ["Hora", report.hora],
+      ["Empleado", report.empleado],
+      ["Temp. de Austenizado Z1", `${report.z1} °C`],
+      ["Temp. de Austenizado Z2", `${report.z2} °C`],
+      ["Avance", `${report.avance} mm`],
+      ["Ciclo", `${report.ciclo} seg`],
+      ["Tiempo de Austenizado", `${report.tiempo} min`],
     ],
     theme: "grid",
     headStyles: {
       fillColor: [24, 61, 66],
       textColor: 255,
+      fontStyle: "bold",
     },
     styles: {
       font: "helvetica",
@@ -89,13 +88,18 @@ function createPdf(values, folio) {
     margin: { left: 18, right: 18 },
   });
 
-  pdf.setFontSize(8);
-  pdf.setTextColor(104, 125, 125);
-  pdf.text("Documento generado digitalmente", pageWidth / 2, 281, {
-    align: "center",
-  });
+  // Pie de página
+  doc.setFontSize(8);
+  doc.setTextColor(104, 125, 125);
+  doc.text(
+    "Documento generado automáticamente",
+    pageWidth / 2,
+    285,
+    { align: "center" }
+  );
 
-  pdf.save(`${folio}.pdf`);
+  // Descarga directa del PDF
+  doc.save(`${report.folio}.pdf`);
 }
 
 setCurrentDateAndTime();
@@ -109,14 +113,22 @@ form.addEventListener("submit", (event) => {
 
   if (!window.jspdf?.jsPDF) {
     statusMessage.textContent =
-      "No se pudo cargar el generador PDF. Revisa tu conexión e intenta de nuevo.";
+      "No se cargó jsPDF. Recarga la página y revisa tu conexión a internet.";
     statusMessage.classList.add("error");
     return;
   }
 
-  const values = Object.fromEntries(new FormData(form).entries());
-  const folio = getFolio(values.fecha);
+  const report = Object.fromEntries(new FormData(form).entries());
+  report.empleado = report.empleado.trim();
+  report.folio = createFolio(report.fecha);
 
-  createPdf(values, folio);
-  statusMessage.textContent = `Reporte descargado: ${folio}.pdf`;
+  try {
+    generarPDF(report);
+    statusMessage.textContent = `Descarga iniciada: ${report.folio}.pdf`;
+  } catch (error) {
+    console.error("Error al generar el PDF:", error);
+    statusMessage.textContent =
+      "No se pudo generar el PDF. Revisa la consola del navegador para ver el error.";
+    statusMessage.classList.add("error");
+  }
 });
