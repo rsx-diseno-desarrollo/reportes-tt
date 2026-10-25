@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Registro de inspección para tratamientos térmicos."
+    />
+    <title>Reporte de inspección | Tratamientos térmicos</title>
+
+    <link rel="stylesheet" href="styles.css" />
+
+    <!-- jsPDF y el complemento para crear tablas en el PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.4/jspdf.plugin.autotable.min.js"></script>
+    <script src="app.js" defer></script>
+  </head>
+
+  <body>
+    <header class="site-header">
+      <div class="brand">PLANTA <span>·</span> CALIDAD</div>
+      <div class="header-label">CONTROL DE PROCESO</div>
+    </header>
+
+    <main class="page-container">
+      <section class="intro">
+        <p class="eyebrow">TRATAMIENTOS TÉRMICOS</p>
+        <h1>Registro de <span>inspección</span></h1>
+        <p>
+          Captura los parámetros del proceso y genera el reporte de inspección
+          en PDF.
+        </p>
+      </section>
+
+      <div class="content-layout">
+        <section class="form-card">
+          <div class="card-heading">
+            <div>
+              <p class="section-label">NUEVO REGISTRO</p>
+              <h2>Datos del proceso</h2>
+            </div>
+            <span class="step-badge"><strong>01</strong> / 01</span>
+          </div>
+
+          <form id="report-form">
+            <div class="fields-grid">
+              <label class="field">
+                <span>Fecha <span class="required">*</span></span>
+                <input name="fecha" type="date" required />
+              </label>
+
+              <label class="field">
+                <span>Hora <span class="required">*</span></span>
+                <input name="hora" type="time" required />
+              </label>
+
+              <label class="field field-wide">
+                <span>Empleado <span class="required">*</span></span>
+                <input
+                  name="empleado"
+                  type="text"
+                  maxlength="100"
+                  placeholder="Nombre del empleado"
+                  required
+                />
+              </label>
+            </div>
+
+            <div class="divider">
+              <span>PARÁMETROS DE INSPECCIÓN</span>
+            </div>
+
+            <div class="fields-grid">
+              <label class="field">
+                <span>Temp. de Austenizado Z1 <span class="required">*</span></span>
+                <span class="input-with-unit">
+                  <input name="z1" type="number" step="any" required />
+                  <span class="unit">°C</span>
+                </span>
+              </label>
+
+              <label class="field">
+                <span>Temp. de Austenizado Z2 <span class="required">*</span></span>
+                <span class="input-with-unit">
+                  <input name="z2" type="number" step="any" required />
+                  <span class="unit">°C</span>
+                </span>
+              </label>
+
+              <label class="field">
+                <span>Avance <span class="required">*</span></span>
+                <span class="input-with-unit">
+                  <input name="avance" type="number" min="0" step="any" required />
+                  <span class="unit">mm</span>
+                </span>
+              </label>
+
+              <label class="field">
+                <span>Ciclo <span class="required">*</span></span>
+                <span class="input-with-unit">
+                  <input name="ciclo" type="number" min="0" step="any" required />
+                  <span class="unit">seg</span>
+                </span>
+              </label>
+
+              <label class="field field-wide">
+                <span>Tiempo de Austenizado <span class="required">*</span></span>
+                <span class="input-with-unit">
+                  <input name="tiempo" type="number" min="0" step="any" required />
+                  <span class="unit">min</span>
+                </span>
+              </label>
+            </div>
+
+            <div class="form-actions">
+              <p><span class="required">*</span> Campos obligatorios</p>
+              <button class="primary-button" type="submit">
+                Generar reporte PDF <span aria-hidden="true">↗</span>
+              </button>
+            </div>
+
+            <p id="status" class="status-message" role="status" aria-live="polite"></p>
+          </form>
+        </section>
+
+        <aside class="side-column">
+          <section class="preview-card">
+            <p class="preview-label">VISTA PREVIA</p>
+            <h2>Tu reporte,<br />listo para compartir.</h2>
+            <p>Genera un documento claro con los datos del proceso, listo para descargar.</p>
+
+            <div class="paper-preview">
+              <div class="paper-header">
+                <strong>CALIDAD</strong>
+                <span>R-TT-000000-00</span>
+              </div>
+              <p class="paper-title">
+                Reporte de inspección:<br />
+                Tratamientos Termicos
+              </p>
+              <div class="paper-row"><span>FECHA</span><strong>DD / MM / AA</strong></div>
+              <div class="paper-row"><span>EMPLEADO</span><strong>Nombre del empleado</strong></div>
+              <div class="paper-row"><span>TEMP. AUSTENIZADO Z1</span><strong>— °C</strong></div>
+              <div class="paper-row"><span>TEMP. AUSTENIZADO Z2</span><strong>— °C</strong></div>
+              <div class="paper-row"><span>AVANCE · CICLO</span><strong>— mm · — seg</strong></div>
+              <div class="paper-row"><span>TIEMPO AUSTENIZADO</span><strong>— min</strong></div>
+            </div>
+
+            <p class="download-note">
+              ↓ PDF descargable
+              <small>Folio consecutivo por fecha</small>
+            </p>
+          </section>
+
+          <p class="privacy-note">
+            Prototipo local · Los datos no se guardan en una base de datos
+          </p>
+        </aside>
+      </div>
+
+      <footer class="site-footer">
+        CONTROL DE CALIDAD · REGISTRO DE INSPECCIÓN
+        <span>PROTOTIPO 01</span>
+      </footer>
+    </main>
+  </body>
+</html>
