@@ -1,23 +1,33 @@
 <!doctype html>
 <html lang="es">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta
       name="description"
       content="Registro de inspección para tratamientos térmicos."
     />
     <title>Reporte de inspección | Tratamientos térmicos</title>
 
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles.css"/>
 
     <!-- jsPDF y el complemento para crear tablas en el PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.4/jspdf.plugin.autotable.min.js"></script>
+    <script src="script.js" defer></script>
     <script src="genReport.js" defer></script>
   </head>
 
   <body>
+    <div class="welcome-overlay" id="welcome-overlay" role="dialog" aria-modal="true" aria-labelledby="welcome-title">
+      <div class="welcome-card">
+        <p class="eyebrow">TRATAMIENTOS TÉRMICOS</p>
+        <h2 id="welcome-title">Bienvenido, comienza a registrar reportes</h2>
+        <button class="primary-button" id="continue-button" type="button">
+          Continuar
+        </button>
+      </div>
+    </div>
     <header class="site-header">
       <div class="brand">PLANTA <span>·</span> CALIDAD</div>
       <div class="header-label">CONTROL DE PROCESO</div>
@@ -33,8 +43,39 @@
         </p>
       </section>
 
+      <nav class="mode-switch" role="tablist" aria-label="Tipo de operación">
+        <button
+          class="mode-button is-active"
+          id="generate-tab"
+          type="button"
+          role="tab"
+          aria-selected="true"
+          aria-controls="generate-panel"
+          data-panel="generate-panel"
+        >
+          Generar reporte
+        </button>
+      
+        <button
+          class="mode-button"
+          id="search-tab"
+          type="button"
+          role="tab"
+          aria-selected="false"
+          aria-controls="search-panel"
+          data-panel="search-panel"
+        >
+          Consultar reporte
+        </button>
+      </nav>
+
       <div class="content-layout">
-        <section class="form-card">
+        <section
+            class="form-card"
+            id="generate-panel"
+            role="tabpanel"
+            aria-labelledby="generate-tab"
+          >
           <div class="card-heading">
             <div>
               <p class="section-label">NUEVO REGISTRO</p>
@@ -124,39 +165,57 @@
           </form>
         </section>
 
-        <aside class="side-column">
-          <section class="preview-card">
-            <p class="preview-label">VISTA PREVIA</p>
-            <h2>Tu reporte,<br />listo para compartir.</h2>
-            <p>Genera un documento claro con los datos del proceso, listo para descargar.</p>
-
-            <div class="paper-preview">
-              <div class="paper-header">
-                <strong>CALIDAD</strong>
-                <span>R-TT-000000-00</span>
+        <section
+              class="form-card"
+              id="search-panel"
+              role="tabpanel"
+              aria-labelledby="search-tab"
+              hidden
+            >
+              <div class="card-heading">
+                <div>
+                  <p class="section-label">BÚSQUEDA</p>
+                  <h2>Consultar reporte</h2>
+                </div>
               </div>
-              <p class="paper-title">
-                Reporte de inspección:<br />
-                Tratamientos Termicos
+            
+              <p class="query-help">
+                Busca por fecha, número de empleado o ambos datos.
               </p>
-              <div class="paper-row"><span>FECHA</span><strong>DD / MM / AA</strong></div>
-              <div class="paper-row"><span>EMPLEADO</span><strong>Nombre del empleado</strong></div>
-              <div class="paper-row"><span>TEMP. AUSTENIZADO Z1</span><strong>— °C</strong></div>
-              <div class="paper-row"><span>TEMP. AUSTENIZADO Z2</span><strong>— °C</strong></div>
-              <div class="paper-row"><span>AVANCE · CICLO</span><strong>— mm · — seg</strong></div>
-              <div class="paper-row"><span>TIEMPO AUSTENIZADO</span><strong>— min</strong></div>
-            </div>
-
-            <p class="download-note">
-              ↓ PDF descargable
-              <small>Folio consecutivo por fecha</small>
-            </p>
-          </section>
-
-          <p class="privacy-note">
-            Prototipo local · Los datos no se guardan en una base de datos
-          </p>
-        </aside>
+            
+              <form id="search-form">
+                <div class="fields-grid">
+                  <label class="field">
+                    <span>Fecha</span>
+                    <input name="fecha" type="date" />
+                  </label>
+            
+                  <label class="field">
+                    <span>Número de empleado</span>
+                    <input
+                      name="empleado"
+                      type="text"
+                      maxlength="100"
+                      placeholder="Escribe el número de empleado"
+                    />
+                  </label>
+                </div>
+            
+                <div class="form-actions">
+                  <p>Ingresa al menos un dato para buscar.</p>
+                  <button class="primary-button" type="submit">
+                    Buscar
+                  </button>
+                </div>
+            
+                <p
+                  id="search-status"
+                  class="status-message"
+                  role="status"
+                  aria-live="polite"
+                ></p>
+              </form>
+            </section>
       </div>
 
       <footer class="site-footer">
