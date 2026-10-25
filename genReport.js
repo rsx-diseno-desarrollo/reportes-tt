@@ -13,13 +13,23 @@ function formatDate(dateValue) {
   return `${day}/${month}/${year}`;
 }
 
+const folioCounters = new Map();
+
 function createFolio(dateValue) {
-  const { year, month, day } = getDateParts(dateValue);
+  const [year, month, day] = dateValue.split("-");
   const dateCode = `${day}${month}${year.slice(-2)}`;
   const storageKey = `reportes-tt-${dateCode}`;
 
-  const nextNumber = Number(localStorage.getItem(storageKey) || 0) + 1;
-  localStorage.setItem(storageKey, String(nextNumber));
+  let nextNumber;
+
+  try {
+    nextNumber = Number(localStorage.getItem(storageKey) || 0) + 1;
+    localStorage.setItem(storageKey, String(nextNumber));
+  } catch {
+    // Respaldo para navegadores que bloquean localStorage en archivos locales.
+    nextNumber = (folioCounters.get(dateCode) || 0) + 1;
+    folioCounters.set(dateCode, nextNumber);
+  }
 
   return `R-TT-${dateCode}-${String(nextNumber).padStart(2, "0")}`;
 }
@@ -128,7 +138,7 @@ form.addEventListener("submit", (event) => {
   } catch (error) {
     console.error("Error al generar el PDF:", error);
     statusMessage.textContent =
-      "No se pudo generar el PDF. Revisa la consola del navegador para ver el error.";
+      `Error al generar el PDF: ${error.message}`;
     statusMessage.classList.add("error");
   }
 });
