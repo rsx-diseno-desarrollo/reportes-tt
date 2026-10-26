@@ -96,7 +96,7 @@
                 <input name="hora" type="time" required />
               </label>
 
-              <label class="field field-wide">
+              <label class="field">
                 <span>Empleado <span class="required">*</span></span>
                 <input
                   name="empleado"
@@ -105,6 +105,18 @@
                   placeholder="Num. de empleado"
                   required
                 />
+              </label>
+              <label class="field">
+              <div class="form-group">
+                <label for="tanque">Tanque</label>
+                <select id="tanque" name="tanque" required>
+                  <option value="">Seleccione un tanque</option>
+                  <option value="T1">T1</option>
+                  <option value="T2">T2</option>
+                  <option value="T4">T4</option>
+                  <option value="T5">T5</option>
+                </select>
+              </div>
               </label>
             </div>
 
@@ -199,16 +211,16 @@
                       placeholder="Escribe el número de empleado"
                     />
                   </label>
-                  <div class="form-group">
-                    <label for="tanque">Tanque</label>
-                    <select id="tanque" name="tanque" required>
-                      <option value="">Seleccione un tanque</option>
-                      <option value="T1">T1</option>
-                      <option value="T2">T2</option>
-                      <option value="T4">T4</option>
-                      <option value="T5">T5</option>
-                    </select>
-                  </div>
+                  <label class="field">
+                  <label for="filter-tanque">Tanque</label>
+                  <select id="filter-tanque">
+                    <option value="">Todos</option>
+                    <option value="T1">T1</option>
+                    <option value="T2">T2</option>
+                    <option value="T4">T4</option>
+                    <option value="T5">T5</option>
+                  </select>
+                  </label>
                 </div>
             
                 <div class="form-actions">
