@@ -2,12 +2,12 @@
   --color-ink: #292522;
   --color-oil: #211a17;
   --color-steel: #68625e;
-  --color-orange: #e97843;
-  --color-rust: #a8422b;
+  --color-orange: #ff8a55;
+  --color-rust: #f54927;
   --color-muted: #77716c;
   --color-border: #e4ded8;
   --color-background: #f4f1ed;
-  --color-surface: #fff;
+  --color-surface: #ffffff;
   --color-input: #fffdfa;
   --font-main: Arial, sans-serif;
 }
@@ -281,7 +281,7 @@ body {
 .primary-button {
   min-height: 45px;
   padding: 0 17px;
-  color: #fff;
+  color: var(--color-oil);
   background: var(--color-rust);
   border: 0;
   border-radius: 5px;
@@ -292,7 +292,8 @@ body {
 }
 
 .primary-button:hover {
-  background: var(--color-oil);
+  color: #ffffff;
+  background: #c9361b;
 }
 
 .primary-button:active {
