@@ -77,6 +77,7 @@ function generarPDF(report) {
       ["Fecha", formatDate(report.fecha)],
       ["Hora", report.hora],
       ["Empleado", report.empleado],
+      ["Tanque", report.tanque],
       ["Temp. de Austenizado Z1", `${report.z1} °C`],
       ["Temp. de Austenizado Z2", `${report.z2} °C`],
       ["Avance", `${report.avance} mm`],
