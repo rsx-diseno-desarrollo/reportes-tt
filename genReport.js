@@ -83,6 +83,7 @@ function generarPDF(report) {
       ["Avance", `${report.avance} mm`],
       ["Ciclo", `${report.ciclo} seg`],
       ["Tiempo de Austenizado", `${report.tiempo} min`],
+      ["Observaciones", report.observaciones || "-"],
     ],
     theme: "grid",
     headStyles: {
