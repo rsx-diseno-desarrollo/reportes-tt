@@ -50,3 +50,18 @@ searchForm.addEventListener("submit", (event) => {
   searchStatus.textContent =
     "La consulta es una demostración. Aún no hay una base de datos conectada.";
 });
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", async () => {
+    try {
+      await navigator.serviceWorker.register("./sw.js");
+
+      console.log("TT Inspector: SW registrado");
+    } catch (error) {
+      console.error(
+        "TT Inspector: Error registrando SW",
+        error
+      );
+    }
+  });
+}
