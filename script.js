@@ -24,6 +24,9 @@ modeButtons.forEach((button) => {
 
     document.querySelector("#search-panel").hidden =
       selectedPanelId !== "search-panel";
+
+    document.querySelector("#analysis-panel").hidden =
+      selectedPanelId !== "analysis-panel";
   });
 });
 
