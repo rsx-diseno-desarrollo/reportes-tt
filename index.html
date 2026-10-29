@@ -7,7 +7,15 @@
       name="description"
       content="Registro de inspección para tratamientos térmicos."
     />
-    <title>Reporte de inspección | Tratamientos térmicos</title>
+    <title>TT: Inspector</title>
+
+  <link rel="manifest" href="manifest.json">
+
+  <link rel="icon" type="image/png" href="img/favicon.png">
+
+  <link rel="apple-touch-icon" href="img/icon-192.png">
+
+  <meta name="theme-color" content="#F54927">
 
     <link rel="stylesheet" href="styles.css"/>
 
@@ -69,10 +77,16 @@
         </button>
 
         <button
-          class="mode-button"
-          data-view="analysis">
+            class="mode-button"
+            id="analysis-tab"
+            type="button"
+            role="tab"
+            aria-selected="false"
+            aria-controls="analysis-panel"
+            data-panel="analysis-panel"
+          >
             Análisis
-        </button>
+          </button>
       </nav>
 
       <div class="content-layout">
@@ -87,7 +101,7 @@
               <p class="section-label">NUEVO REGISTRO</p>
               <h2>Datos del proceso</h2>
             </div>
-            <span class="step-badge"><strong>01</strong> / 01</span>
+            <span class="step-badge">TT: Inspector</span>
           </div>
 
           <form id="report-form">
@@ -252,16 +266,27 @@
               </form>
             </section>
 
-            <section id="analysis-view" class="view hidden">
-              <div class="card">
-                <h2>Análisis</h2>
-            
-                <p>
-                  Próximamente este módulo mostrará información histórica,
-                  tendencias operativas e indicadores de desempeño de los tanques.
-                </p>
-              </div>
-            </section>
+            <section
+                class="form-card"
+                id="analysis-panel"
+                role="tabpanel"
+                aria-labelledby="analysis-tab"
+                hidden
+              >
+                <div class="card-heading">
+                  <div>
+                    <p class="section-label">ANÁLISIS</p>
+                    <h2>Información de tanques</h2>
+                  </div>
+                </div>
+              
+                <div class="analysis-placeholder">
+                  <p>
+                    Próximamente este módulo mostrará información histórica,
+                    tendencias operativas e indicadores de desempeño de los tanques.
+                  </p>
+                </div>
+              </section>
       </div>
 
       <footer class="site-footer">
